@@ -1,0 +1,533 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="https:https://unpkg.com/reveal.js/css/reset.css">
+	<link rel="stylesheet" href="https://unpkg.com/reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="https://unpkg.com/reveal.js/css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="https://unpkg.com/reveal.js/lib/css/monokai.css">
+
+	<style>
+		.reveal pre code {
+			max-height: unset;
+			padding: .5rem;
+			border-radius: .25rem;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'https://unpkg.com/reveal.js/css/print/pdf.css' : 'https://unpkg.com/reveal.js/css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-color="#357EDD">
+				<h1>Typescript</h1>
+
+				<ul class="fragment">
+					<li>What is typescript?</li>
+					<li>History & Today</li>
+					<li>Why?</li>
+					<li>Basics</li>
+					<li>Typescript Utilities</li>
+					<li>Examples</li>
+					<li>Future</li>
+				</ul>
+			</section>
+			<section>
+				<section data-markdown data-background-color="#CDECFF">
+					<script type="text/template">
+						## What is Typescript?
+
+						- Superset of Javascript <!-- .element: class="fragment" -->
+						- Enables typschecking <!-- .element: class="fragment" -->
+						</script>
+				</section>
+				<section data-transition="fade-out slide-in">
+					<h3>Javascript</h3>
+					<pre><code data-trim class="hljs">
+							let a = 'a string'
+							a = 5
+							a = [1, 'two', {three: true}]
+						</code></pre>
+				</section>
+				<section data-transition="fade-in slide-out">
+					<h3>Typescript</h3>
+					<pre><code data-trim class="hljs">
+								let a = 'a string' https:// a is a string now
+								a = 5 https:// ❌
+								a = [1, 'two', {three: true}] https:// ❌
+							</code></pre>
+				</section>
+			</section>
+			<section data-background-color="#FBF1A9">
+				<section data-markdown>
+					<script type="text/template">
+						## Brief History Lesson
+						
+						- <!-- .element: class="fragment" --> Development started in 2009 (codename Strada)
+						- <!-- .element: class="fragment" --> Problems scaling the office 365 suite (released June 2011)
+						- <!-- .element: class="fragment" --> Lead by Anders Hejlsberg (Author of C#, Delphi & Tubro Pascal) and Luke Hoban (Part of tc39)
+						- <!-- .element: class="fragment" --> 2012: <span><!-- .element: class="fragment fade-in" --><span><!-- .element: class="fragment highlight-red" -->World End</span></span><span> <!-- .element: class="fragment fade-in" -->;  Released to public `v0.8`</span>
+						- <!-- .element: class="fragment" --> 2014: Moved to Github
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Today
+						<small>2 Oct. 2019</small>
+						
+						- <!-- .element: class="fragment" --> ~54k Stargazers
+						- <!-- .element: class="fragment" --> ~10k closed PRs (167 open)
+						- <!-- .element: class="fragment" --> ~20k closed issues (~3.5k open)
+						- <!-- .element: class="fragment" --> 419 Contributors
+						- <!-- .element: class="fragment" --> Made & <b>Maintained</b> by Microsoft
+					</script>
+				</section>
+			</section>
+			<section data-background-color="#FFDFDF">
+				<section data-markdown>
+					<script type="text/template">
+						## So Why?
+						
+						- <!-- .element: class="fragment" --> Less Errors
+							- <!-- .element: class="fragment" --> Less Bug-Hunting
+							- <!-- .element: class="fragment" --> More work gets done
+						- <!-- .element: class="fragment" --> Maintainability
+							- <!-- .element: class="fragment" --> Enables fast fixes
+							- <!-- .element: class="fragment" --> Dev. must not be context aware
+						- <!-- .element: class="fragment" --> Autocompletition, "Smart" IDEs, etc.
+					</script>
+				</section>
+				<section data-background-image="https:https://media.giphy.com/media/YXpp9YxWhyWBy/giphy.gif"></section>
+			</section>
+			<section data-background-color="#E8FDF5">
+				<section>
+					<h2>TS Config</h2>
+
+					<pre class="fragment"><code data-trim class="hljs">
+						npm i typescript
+						tsc --init
+					</code></pre>
+				</section>
+				<section>
+					<h3>General</h3>
+
+					<ul>
+						<li class="fragment">target <small>(ES2014, ..., ES2019, ESNEXT, ...)</small></li>
+						<li class="fragment">module <small>(commonjs, es2016, esnext, ...)</small></li>
+						<li class="fragment">jsx</li>
+						<li class="fragment">esModuleInterop</li>
+						<li class="fragment">allowSyntheticDefaultImports</li>
+						<li class="fragment">experimentalDecorators</li>
+						<li class="fragment">emitDecoratorMetadata</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Type Cheking</h3>
+
+					<ul>
+						<li class="fragment">noImplicitAny</li>
+						<li class="fragment">strictNullChecks</li>
+						<li class="fragment">strictFunctionTypes</li>
+						<li class="fragment">strictBindCallApply</li>
+						<li class="fragment">strictPropertyInitialization</li>
+						<li class="fragment">noImplicitThis</li>
+						<li class="fragment">alwaysStrict</li>
+						<li class="fragment">noImplicitReturns</li>
+						<li class="fragment">noFallthroughCasesInSwitch</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Production</h3>
+
+					<ul>
+						<li class="fragment">noUnusedLocals</li>
+						<li class="fragment">noUnusedParameters</li>
+						<li class="fragment">removeComments</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>Basics</h2>
+				</section>
+				<section data-transition="slide-id fade-out">
+					<h3>Simple types</h3>
+					<pre class="fragment"><code data-trim class="hljs">
+						const a: string = 'a string'
+						const b: number = 5
+						const c: boolean = true
+						const d: string[] = ['a', 'b', 'c']
+						const e: number[] = [1, 2, 3]
+					</code></pre>
+				</section>
+				<section data-transition="fate-in slide-out">
+					<h3>Simple types</h3>
+					<pre><code data-trim class="hljs">
+						const a = 'a string'
+						const b = 5
+						const c = true
+						const d = ['a', 'b', 'c']
+						const e = [1, 2, 3]
+					</code></pre>
+				</section>
+				<section>
+					<h3>Types</h3>
+					<pre class="fragment"><code data-trim class="hljs">
+						type StrinOrNumber = string | number
+						type StringOrNumberOrBoolean = StringOrNumber | boolean
+					</code></pre>
+				</section>
+				<section>
+					<h3>Modifiers</h3>
+					<pre class="fragment"><code data-trim class="hljs">
+						const a: string
+						const b?: string
+						const c!: string
+
+						constructor(field?: text)
+					</code></pre>
+				</section>
+				<section data-transition="slide-id fade-out">
+					<h3>Interfaces</h3>
+					<pre class="fragment"><code data-trim class="hljs">
+						interface Pizza {
+							slices: number
+							round: boolean
+							name: string
+						}
+
+						const pizza: Pizza = {
+							slices: 4,
+							round: true,
+							name: 'Hawaii'
+						}
+					</code></pre>
+				</section>
+				<section data-transition="slide-out fade-in">
+					<h3>Interfaces</h3>
+					<pre><code data-trim class="hljs">
+						interface Pizza {
+							slices: 4 | 8
+							round: boolean
+							name: 'Margherita' | 'Parmigiana'
+						}
+
+						const pizza: Pizza = {
+							slices: -1, https:// ❌
+							round: true,
+							name: 'Margherita'
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Interfaces</h3>
+					<pre><code data-trim class="hljs">
+						interface A {
+							one: string
+						}
+						
+						interface B extends A {
+							two: number
+							three?: string
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Interfaces</h3>
+					<pre><code data-trim class="hljs">
+						interface Project {
+							name: string,
+							paymentBasis: 'fix' | 'hour'
+						}
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						interface GoodProject extends Project {
+							paymentBasis: 'hour'
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Functions</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function add(x: number, y: number): number {
+							return x + y
+						}
+						
+						const add = (x: number, y: number): number => {
+							return x + y
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function choose&lt;T, P&gt;(a: T, b: P): T | P {
+							if (something)
+								return a
+							else
+								return b
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						const waitForMe = async (text:string): Promise&lt;string&gt; =&gt; text
+					</code></pre>
+				</section>
+				<section>
+					<h3>Overloading</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function add(x: number): number
+						function add(x: number, y: number = 1): number {
+							return x + y
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function add(a: string, b: string): string
+						function add(a: number, b: number): number
+						function add(a: string | number, b: string | number): string | number {
+							if (a.constructor.name === 'String') return a + b
+							else return a + b
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Generics</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function choose&lt;T, P&gt;(a: T, b: P): T | P {
+							if (something)
+								return a
+							else
+								return b
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						type Something&lt;T&gt; = {
+							a: string,
+							b: T
+						}
+					</code></pre>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Typescript Utilities Types</h2>
+					<ul class="fragment">
+						<li>Partial & Required</li>
+						<li>Readonly</li>
+						<li>Pick & Omit</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Partial / Required</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface Props {
+							a: number;
+							b: string;
+						};
+						
+						const x: Props = { a: 5 }; https:// Error: property 'b' missing
+						
+						const y: Partial&lt;Props&gt; = { a: 5 }; https:// OK
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface Props {
+							a?: number;
+							b?: string;
+						};
+						
+						const x: Props = { a: 5 }; https:// OK
+						
+						const y: Required&lt;Props&gt; = { a: 5 }; https:// Error: property 'b' missing
+					</code></pre>
+				</section>
+				<section>
+					<h3>Readonly</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface Todo {
+							title: string;
+						}
+						
+						const todo: Readonly&lt;Todo&gt; = {
+							title: 'Delete inactive users',
+						};
+						
+						todo.title = 'Hello'; https:// Error: cannot reassign a readonly property
+					</code></pre>
+				</section>
+				<section>
+					<h3>Pick / Omit</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface Todo {
+							title: string;
+							description: string;
+							completed: boolean;
+						}
+						
+						const todo: Pick&lt;Todo, 'title' | 'completed'&gt; = {
+							title: 'Clean room',
+							completed: false,
+						};
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface Todo {
+							title: string;
+							description: string;
+							completed: boolean;
+						}
+						
+						const todo: Omit&lt;Todo, 'description'&gt; = {
+							title: 'Clean room',
+							completed: false,
+						};
+					</code></pre>
+				</section>
+				<section>
+						<h2>Also there are...</h2>
+						<ul>
+							<li>Exclude & Extract</li>
+							<li>Record</li>
+							<li>NonNullable</li>
+							<li>ReturnType</li>
+							<li>InstanceType</li>
+							<li>ThisType</li>
+						</ul>
+					</section>
+			</section>
+			
+			<section>
+				<section>
+					<h2>Examples</h2>
+				</section>
+				<section>
+					<h3>Constructor</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						class Auto {
+							wheels: number
+						
+							constructor(wheel: number) {
+								this.wheels = wheel
+							}
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						class Auto {
+							constructor(private wheel: number) { }
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						class Auto {
+							wheels: number
+						
+							constructor(init: typeof Auto) {
+								Object.assign(this, init)
+							}
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Advanced Stuff</h3>
+					<pre><code data-trim class="hljs">
+						class Auto {
+							wheels?: number
+							doors?: number
+							https:// ...
+						
+							constructor(init: Partial&lt;Auto&gt;) {
+								Object.assign(this, init)
+							}
+						}
+
+						const a = new Auto({
+							doors: 5,
+						})
+					</code></pre>
+				</section>
+				<section>
+					<h3>Advanced Stuff</h3>
+					<pre><code data-trim class="hljs">
+						type RequireSome&lt;T, K extends keyof T&gt; = {
+							[X in Exclude&lt;keyof T, K&gt;]?: T[X]
+						} &amp; {
+							[P in K]-?: T[P]
+						}
+
+						class Auto {
+							wheels!: number
+							doors?: number
+							https:// ...
+						
+							constructor(init: RequireSome&lt;Auto, 'wheels'&gt;) {
+								Object.assign(this, init)
+							}
+						}
+
+						const a = new Auto({
+							wheels: 4,
+							doors: 5,
+						})
+					</code></pre>
+				</section>
+				<section>
+					<h3>React Higher Order Components</h3>
+					<pre><code data-trim class="hljs" data-line-numbers="1,2,5">
+						function withLayout&lt;P extends object&gt;(WrappedComponent: React.ComponentType&lt;P&gt;) {
+							return (props: P) =&gt; (
+								&lt;div id='app'&gt;
+									&lt;Header/&gt;
+									&lt;WrappedComponent {...props}/&gt;
+									&lt;Footer/&gt;
+								&lt;/div&gt;
+							);
+						}
+					</code></pre>
+				</section>
+			</section>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/reveal.js/js/reveal.js"></script>
+
+	<script>
+		Reveal.initialize({
+			width: "100%",
+			height: "100%",
+			margin: .1,
+			minScale: 1,
+			maxScale: 1,
+			transition: 'slide',
+			hash: true,
+			fragmentInURL: true,
+			slideNumber: 'c/t',
+			dependencies: [{
+					src: 'https://unpkg.com/reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/highlight/highlight.js',
+					async: true
+				}
+			]
+		});
+	</script>
+</body>
+
+</html>
