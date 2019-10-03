@@ -27,7 +27,8 @@
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.type = 'text/css';
-		link.href = window.location.search.match(/print-pdf/gi) ? 'https://unpkg.com/reveal.js/css/print/pdf.css' : 'https://unpkg.com/reveal.js/css/print/paper.css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'https://unpkg.com/reveal.js/css/print/pdf.css' :
+			'https://unpkg.com/reveal.js/css/print/paper.css';
 		document.getElementsByTagName('head')[0].appendChild(link);
 	</script>
 </head>
@@ -424,18 +425,17 @@
 					</code></pre>
 				</section>
 				<section>
-						<h2>Also there are...</h2>
-						<ul>
-							<li>Exclude & Extract</li>
-							<li>Record</li>
-							<li>NonNullable</li>
-							<li>ReturnType</li>
-							<li>InstanceType</li>
-							<li>ThisType</li>
-						</ul>
-					</section>
+					<h2>Also there are...</h2>
+					<ul>
+						<li>Exclude & Extract</li>
+						<li>Record</li>
+						<li>NonNullable</li>
+						<li>ReturnType</li>
+						<li>InstanceType</li>
+						<li>ThisType</li>
+					</ul>
+				</section>
 			</section>
-			
 			<section>
 				<section>
 					<h2>Examples</h2>
@@ -521,6 +521,42 @@
 								&lt;/div&gt;
 							);
 						}
+					</code></pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>Future</h2>
+				</section>
+				<section>
+					<h3>Optional Chaining</h3>
+					<i>TS 3.7</i>
+					<pre class="fragment"><code data-trim class="hljs">
+						a && a.b && a.b.c // 🤬
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						a?.b?.c // 🚀
+					</code></pre>
+				</section>
+				<section>
+					<h3>Null Coalescing</h3>
+					<i>TS 3.7</i>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						something || 'default'
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						false || 'default'      // => 'default'
+						0     || 'default'      // => 'default'
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						something ?? 'default'  // 🚀
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						0     ?? 'default'      // => 0
+						false ?? 'default'      // => false
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						(something === null || something === undefined) ? something : 'default'
 					</code></pre>
 				</section>
 			</section>
