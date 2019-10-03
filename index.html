@@ -68,9 +68,9 @@
 				<section data-transition="fade-in slide-out">
 					<h3>Typescript</h3>
 					<pre><code data-trim class="hljs">
-								let a = 'a string' https:// a is a string now
-								a = 5 https:// ❌
-								a = [1, 'two', {three: true}] https:// ❌
+								let a = 'a string' // a is a string now
+								a = 5 // ❌
+								a = [1, 'two', {three: true}] // ❌
 							</code></pre>
 				</section>
 			</section>
@@ -113,7 +113,7 @@
 						- <!-- .element: class="fragment" --> Autocompletition, "Smart" IDEs, etc.
 					</script>
 				</section>
-				<section data-background-image="https:https://media.giphy.com/media/YXpp9YxWhyWBy/giphy.gif"></section>
+				<section data-background-image="https://media.giphy.com/media/YXpp9YxWhyWBy/giphy.gif"></section>
 			</section>
 			<section data-background-color="#E8FDF5">
 				<section>
@@ -190,17 +190,29 @@
 					<h3>Types</h3>
 					<pre class="fragment"><code data-trim class="hljs">
 						type StrinOrNumber = string | number
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
 						type StringOrNumberOrBoolean = StringOrNumber | boolean
 					</code></pre>
 				</section>
 				<section>
 					<h3>Modifiers</h3>
 					<pre class="fragment"><code data-trim class="hljs">
-						const a: string
-						const b?: string
-						const c!: string
+						const a?: string // string | undefined
 
-						constructor(field?: text)
+						const obj = {
+							a: string,
+							b?: number,
+						}
+
+						funntion log(msg?: string) {}
+					</code></pre>
+					<pre class="fragment"><code data-trim class="hljs">
+						class {
+							b!: string
+						}
+
+						obj!.one!.two!.three
 					</code></pre>
 				</section>
 				<section data-transition="slide-id fade-out">
@@ -229,7 +241,7 @@
 						}
 
 						const pizza: Pizza = {
-							slices: -1, https:// ❌
+							slices: -1, // ❌
 							round: true,
 							name: 'Margherita'
 						}
@@ -303,6 +315,23 @@
 					</code></pre>
 				</section>
 				<section>
+					<h3>Classes</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						class User {
+							private id: string
+							public readonly username: string
+							friends: User[] = []
+
+							constructor() {
+								this.id = 'abc'
+								this.username = 'John Doe'
+							}
+
+							private doSomeStuff() {}
+						}
+					</code></pre>
+				</section>
+				<section>
 					<h3>Generics</h3>
 					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
 						function choose&lt;T, P&gt;(a: T, b: P): T | P {
@@ -338,9 +367,9 @@
 							b: string;
 						};
 						
-						const x: Props = { a: 5 }; https:// Error: property 'b' missing
+						const x: Props = { a: 5 }; // Error: property 'b' missing
 						
-						const y: Partial&lt;Props&gt; = { a: 5 }; https:// OK
+						const y: Partial&lt;Props&gt; = { a: 5 }; // OK
 					</code></pre>
 					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
 						interface Props {
@@ -348,9 +377,9 @@
 							b?: string;
 						};
 						
-						const x: Props = { a: 5 }; https:// OK
+						const x: Props = { a: 5 }; // OK
 						
-						const y: Required&lt;Props&gt; = { a: 5 }; https:// Error: property 'b' missing
+						const y: Required&lt;Props&gt; = { a: 5 }; // Error: property 'b' missing
 					</code></pre>
 				</section>
 				<section>
@@ -364,7 +393,7 @@
 							title: 'Delete inactive users',
 						};
 						
-						todo.title = 'Hello'; https:// Error: cannot reassign a readonly property
+						todo.title = 'Hello'; // Error: cannot reassign a readonly property
 					</code></pre>
 				</section>
 				<section>
@@ -429,7 +458,7 @@
 					</code></pre>
 					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
 						class Auto {
-							wheels: number
+							wheels!: number
 						
 							constructor(init: typeof Auto) {
 								Object.assign(this, init)
@@ -443,7 +472,7 @@
 						class Auto {
 							wheels?: number
 							doors?: number
-							https:// ...
+							// ...
 						
 							constructor(init: Partial&lt;Auto&gt;) {
 								Object.assign(this, init)
@@ -467,7 +496,7 @@
 						class Auto {
 							wheels!: number
 							doors?: number
-							https:// ...
+							// ...
 						
 							constructor(init: RequireSome&lt;Auto, 'wheels'&gt;) {
 								Object.assign(this, init)
