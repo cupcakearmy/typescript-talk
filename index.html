@@ -7,7 +7,7 @@
 
 	<title>reveal.js</title>
 
-	<link rel="stylesheet" href="https:https://unpkg.com/reveal.js/css/reset.css">
+	<link rel="stylesheet" href="https://unpkg.com/reveal.js/css/reset.css">
 	<link rel="stylesheet" href="https://unpkg.com/reveal.js/css/reveal.css">
 	<link rel="stylesheet" href="https://unpkg.com/reveal.js/css/theme/black.css">
 
@@ -110,7 +110,7 @@
 							- <!-- .element: class="fragment" --> More work gets done
 						- <!-- .element: class="fragment" --> Maintainability
 							- <!-- .element: class="fragment" --> Enables fast fixes
-							- <!-- .element: class="fragment" --> Dev. must not be context aware
+							- <!-- .element: class="fragment" --> Dev. does not have to be context aware
 						- <!-- .element: class="fragment" --> Autocompletition, "Smart" IDEs, etc.
 					</script>
 				</section>
@@ -523,6 +523,216 @@
 						}
 					</code></pre>
 				</section>
+				<section>
+					<h3>Return Type depends on argument</h3>
+					<pre><code data-trim class="hljs">
+						function choose&lt;T, P&gt;(a: T, b: P, takeFirst?: false): P;
+						function choose&lt;T, P&gt;(a: T, b: P, takeFirst: true): T;
+						function choose&lt;T, P&gt;(a: T, b: P, takeFirst?: boolean): T | P {
+							if (takeFirst)
+								return a
+							else
+								return b
+						}
+
+						choose('a', 1).includes('a'); // error
+						choose('a', 1) * 2;
+						choose('a', 1, true) * 2; // error
+						choose('a', 1, true).includes('a');
+					</code></pre>
+				</section>
+				<section>
+					<h3>Argument type depends on another argument</h3>
+					<pre><code data-trim class="hljs">
+						function checkLock&lt;
+							B extends { alwaysUnlocked?: boolean }, 
+							O extends (B extends { alwaysUnlocked: true } ? {} : { locked: boolean })
+						&gt;(obj: O, options?: B) {
+							return options && options.alwaysUnlocked || !obj.locked
+						}
+
+						checkLock({}); // error
+						checkLock({ locked: false });
+						checkLock({ locked: true, foo: 'bar' });
+
+						checkLock({}, { alwaysUnlocked: false }); // error
+						checkLock({}, { alwaysUnlocked: true });
+						checkLock({ foo: 'bar' }, { alwaysUnlocked: true });
+					</code></pre>
+				</section>
+				<section>
+					<h3>Options exclude each other</h3>
+					<pre><code data-trim class="hljs">
+						type ColumnProps = {
+							width: number;
+							autoCalculateWidth?: false;
+						} | {
+							width?: undefined;
+							autoCalculateWidth: true;
+						}
+						
+						// error
+						const props: ColumnProps = {
+							width: 4,
+							autoCalculateWidth: true,
+						};
+					</code></pre>
+				</section>
+				<section>
+					<h3>Merging Objects together</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function merge&lt;O, T&gt;(data1: O, data2: T): O | T {
+							return {
+								...data1,
+								...data2,
+							};
+						}
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						type Merge&lt;O, T&gt; = Omit&lt;O, keyof T&gt; & T;
+
+						function merge&lt;O, T&gt;(data1: O, data2: T): Merge&lt;O, T&gt; {
+							return {
+								...data1,
+								...data2,
+							};
+						}
+					</code></pre>
+				</section>
+				<section>
+					<h3>Distinguish union types</h3>
+					<pre><code data-trim class="hljs">
+						interface TypeA {
+							type: 'A';
+							foo: string;
+							bar: string;
+						}
+						
+						interface TypeB {
+							type: 'B';
+							foo: number;
+							blubb: string;
+						}
+						
+						function distinguishType(type: TypeA | TypeB) {
+							if (type.type === 'A') {
+								type.foo.includes('whatever');
+								type.bar;
+							} else {
+								type.blubb.includes('something');
+								type.foo.toFixed(2);
+							}
+						}
+					</code></pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>The agony of Object.keys</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						const someObj = {
+							a: 'a',
+							b: 'b',
+							2: 'c',
+						};
+						
+						function filterByKeys(keys: (keyof typeof someObj)[]) {
+							keys.map(key => someObj[key]);
+						}
+						
+						filterByKeys(Object.keys(someObj)); // error
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function getKeysFromObject&lt;
+							T extends {}, K extends string = (keyof T & string)
+						&gt;(object: T): K[] {
+							const keyPredicate = (key: string): key is K =>
+								object.hasOwnProperty(key) && typeof object[key] !== 'undefined' && object[key] !== null;
+						
+							return Object
+								.keys(object)
+								.filter&lt;K&gt;(keyPredicate);
+						};
+					</code></pre>
+				</section>
+				<section>
+					<h3>about predicates</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						interface SomeInterface {
+							what: string,
+							you: string,
+						}
+						
+						const someArray: (SomeInterface | null)[] = [
+							{ what: 'ever', you: 'like' },
+							null,
+							{ what: 'the fuck', you: 'want' },
+							null,
+						];
+						
+						// error: Signature ... must be a type predicate ?!
+						const filteredArray: SomeInterface[] = someArray.filter&lt;SomeInterface&gt;(value => !!value);
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						const predicate = (value: SomeInterface | null): value is SomeInterface => !!value;
+
+						const workingArray: SomeInterface[] = someArray.filter(predicate);
+					</code></pre>
+				</section>
+				<section>
+					<h3>Back to Object.keys</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						const someObj = {
+							a: 'a',
+							b: 'b',
+							2: 'c',
+						};
+						
+						function filterByKeys(keys: (keyof typeof someObj)[]) {
+							keys.map(key => someObj[key]);
+						}
+						
+						function getKeysFromObject&lt;
+							T extends {}, K extends string = (keyof T & string)
+						&gt;(object: T): K[] {
+							const keyPredicate = (key: string): key is K =>
+								object.hasOwnProperty(key) && typeof object[key] !== 'undefined' && object[key] !== null;
+						
+							return Object
+								.keys(object)
+								.filter&lt;K&gt;(keyPredicate);
+						};
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						filterByKeys(getKeysFromObject&lt;typeof someObj&gt;(someObj));
+					</code></pre>
+				</section>
+				<section>
+					<h3>Tradeoffs</h3>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						function getKeysFromObject&lt;
+							T extends {}, K extends string = (keyof T & string)
+						&gt;(object: T): K[] {
+							const keyPredicate = (key: string): key is K =>
+								object.hasOwnProperty(key) && typeof object[key] !== 'undefined' && object[key] !== null;
+						
+							return Object
+								.keys(object)
+								.filter&lt;K&gt;(keyPredicate);
+						};
+					</code></pre>
+					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
+						const testObject = {
+							2: 'teststring',
+							'testkey': 2131,
+							'otherkey': null,
+							3: null,
+						};
+						
+						getKeysFromObject(testObject); // ('testkey' | 'otherkey')[]  --- :(
+						getKeysFromObject&lt;typeof testObject, '2' | 'testkey'&gt;(testObject); // meh...
+					</code></pre>
+				</section>
 			</section>
 			<section>
 				<section>
@@ -577,19 +787,19 @@
 			fragmentInURL: true,
 			slideNumber: 'c/t',
 			dependencies: [{
-					src: 'https://unpkg.com/reveal.js/plugin/markdown/marked.js'
-				},
-				{
-					src: 'https://unpkg.com/reveal.js/plugin/markdown/markdown.js'
-				},
-				{
-					src: 'https://unpkg.com/reveal.js/plugin/notes/notes.js',
-					async: true
-				},
-				{
-					src: 'https://unpkg.com/reveal.js/plugin/highlight/highlight.js',
-					async: true
-				}
+				src: 'https://unpkg.com/reveal.js/plugin/markdown/marked.js'
+			},
+			{
+				src: 'https://unpkg.com/reveal.js/plugin/markdown/markdown.js'
+			},
+			{
+				src: 'https://unpkg.com/reveal.js/plugin/notes/notes.js',
+				async: true
+			},
+			{
+				src: 'https://unpkg.com/reveal.js/plugin/highlight/highlight.js',
+				async: true
+			}
 			]
 		});
 	</script>
