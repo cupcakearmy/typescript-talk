@@ -487,25 +487,21 @@
 				<section>
 					<h3>Advanced Stuff</h3>
 					<pre><code data-trim class="hljs">
-						type RequireSome&lt;T, K extends keyof T&gt; = {
-							[X in Exclude&lt;keyof T, K&gt;]?: T[X]
-						} &amp; {
-							[P in K]-?: T[P]
-						}
+						import { NonFunctionKeys } from 'utility-types'
 
 						class Auto {
 							wheels!: number
 							doors?: number
 							// ...
 						
-							constructor(init: RequireSome&lt;Auto, 'wheels'&gt;) {
+							constructor(init: Pick&lt;Auto, NonFunctionKeys&lt;Auto&gt;&gt;) {
 								Object.assign(this, init)
 							}
 						}
 
 						const a = new Auto({
-							wheels: 4,
-							doors: 5,
+							wheels: 4, // Required
+							doors: 5,  // Optional
 						})
 					</code></pre>
 				</section>
@@ -561,7 +557,7 @@
 					</code></pre>
 				</section>
 				<section>
-					<h3>Options exclude each other</h3>
+					<h3>Discriminated unions</h3>
 					<pre><code data-trim class="hljs">
 						type ColumnProps = {
 							width: number;
@@ -787,19 +783,19 @@
 			fragmentInURL: true,
 			slideNumber: 'c/t',
 			dependencies: [{
-				src: 'https://unpkg.com/reveal.js/plugin/markdown/marked.js'
-			},
-			{
-				src: 'https://unpkg.com/reveal.js/plugin/markdown/markdown.js'
-			},
-			{
-				src: 'https://unpkg.com/reveal.js/plugin/notes/notes.js',
-				async: true
-			},
-			{
-				src: 'https://unpkg.com/reveal.js/plugin/highlight/highlight.js',
-				async: true
-			}
+					src: 'https://unpkg.com/reveal.js/plugin/markdown/marked.js'
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/markdown/markdown.js'
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/notes/notes.js',
+					async: true
+				},
+				{
+					src: 'https://unpkg.com/reveal.js/plugin/highlight/highlight.js',
+					async: true
+				}
 			]
 		});
 	</script>
