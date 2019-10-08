@@ -139,7 +139,7 @@
 					</ul>
 				</section>
 				<section>
-					<h3>Type Cheking</h3>
+					<h3>Type Checking</h3>
 
 					<ul>
 						<li class="fragment">noImplicitAny</li>
@@ -577,20 +577,20 @@
 				<section>
 					<h3>Merging Objects together</h3>
 					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
-						function merge&lt;O, T&gt;(data1: O, data2: T): O | T {
+						function merge&lt;O, T&gt;(master: O, myFeatureBranchFrom3MonthsAgo: T): O | T {
 							return {
-								...data1,
-								...data2,
+								...master,
+								...myFeatureBranchFrom3MonthsAgo,
 							};
 						}
 					</code></pre>
 					<pre class="fragment fade-in-then-semi-out"><code data-trim class="hljs">
 						type Merge&lt;O, T&gt; = Omit&lt;O, keyof T&gt; & T;
 
-						function merge&lt;O, T&gt;(data1: O, data2: T): Merge&lt;O, T&gt; {
+						function merge&lt;O, T&gt;(master: O, myFeatureBranchFrom3MonthsAgo: T): Merge&lt;O, T&gt; {
 							return {
-								...data1,
-								...data2,
+								...master,
+								...myFeatureBranchFrom3MonthsAgo,
 							};
 						}
 					</code></pre>
@@ -598,25 +598,30 @@
 				<section>
 					<h3>Distinguish union types</h3>
 					<pre><code data-trim class="hljs">
-						interface TypeA {
-							type: 'A';
+						enum Type {
+							A = 'A',
+							B = 'B',
+						}
+						
+						interface ImagineCoolExampleName {
+							type: Type.A;
 							foo: string;
 							bar: string;
 						}
 						
-						interface TypeB {
-							type: 'B';
+						interface ImTooLazyToThinkOfRealWorldExamples {
+							type: Type.B;
 							foo: number;
 							blubb: string;
 						}
 						
-						function distinguishType(type: TypeA | TypeB) {
-							if (type.type === 'A') {
-								type.foo.includes('whatever');
-								type.bar;
+						function distinguishType(obj: ImagineCoolExampleName | ImTooLazyToThinkOfRealWorldExamples) {
+							if (obj.type === Type.A) {
+								obj.foo.includes('whatever');
+								obj.bar;
 							} else {
-								type.blubb.includes('something');
-								type.foo.toFixed(2);
+								obj.blubb.includes('something');
+								obj.foo.toFixed(2);
 							}
 						}
 					</code></pre>
@@ -632,8 +637,8 @@
 							2: 'c',
 						};
 						
-						function filterByKeys(keys: (keyof typeof someObj)[]) {
-							keys.map(key => someObj[key]);
+						function filterByKeys(keys: (keyof typeof someObj)[]): ((typeof someObj)[keyof typeof someObj])[] {
+							return keys.map(key => someObj[key]);
 						}
 						
 						filterByKeys(Object.keys(someObj)); // error
@@ -684,8 +689,8 @@
 							2: 'c',
 						};
 						
-						function filterByKeys(keys: (keyof typeof someObj)[]) {
-							keys.map(key => someObj[key]);
+						function filterByKeys(keys: (keyof typeof someObj)[]): ((typeof someObj)[keyof typeof someObj])[] {
+							return keys.map(key => someObj[key]);
 						}
 						
 						function getKeysFromObject&lt;
